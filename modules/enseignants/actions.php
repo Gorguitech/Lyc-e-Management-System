@@ -1,4 +1,5 @@
 <?php
+// modules/enseignants/actions.php
 require_once '../../config/config.php';
 require_once '../../includes/auth.php';
 require_once '../../includes/functions.php';
@@ -24,14 +25,14 @@ if (!in_array($action, ['delete', 'activate', 'deactivate']) || !is_numeric($id)
     exit();
 }
 
-// Récupérer les infos de l'élève pour le log
-$stmt = $conn->prepare("SELECT nom, prenom FROM eleves WHERE id = ?");
+// Récupérer les infos de l'enseignant pour le log
+$stmt = $conn->prepare("SELECT nom, prenom, matiere FROM enseignants WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$eleve = $stmt->get_result()->fetch_assoc();
+$enseignant = $stmt->get_result()->fetch_assoc();
 
-if (!$eleve) {
-    header("Location: list.php?message=Élève non trouvé&message_type=error");
+if (!$enseignant) {
+    header("Location: list.php?message=Enseignant non trouvé&message_type=error");
     exit();
 }
 
@@ -40,36 +41,32 @@ try {
     
     switch ($action) {
         case 'delete':
-            // Vérifier si l'élève a des notes
-            $check_notes = $conn->prepare("SELECT COUNT(*) as nb_notes FROM notes WHERE eleve_id = ?");
+            // Vérifier si l'enseignant a attribué des notes
+            $check_notes = $conn->prepare("SELECT COUNT(*) as nb_notes FROM notes WHERE enseignant_id = ?");
             $check_notes->bind_param("i", $id);
             $check_notes->execute();
             $notes_count = $check_notes->get_result()->fetch_assoc()['nb_notes'];
             
             if ($notes_count > 0) {
-                // Option 1: Supprimer les notes d'abord (décommenter si nécessaire)
-                // $delete_notes = $conn->prepare("DELETE FROM notes WHERE eleve_id = ?");
-                // $delete_notes->bind_param("i", $id);
-                // $delete_notes->execute();
-                
-                // Option 2: Empêcher la suppression (recommandé)
-                header("Location: list.php?message=Impossible de supprimer un élève ayant des notes&message_type=error");
+                // Option 1: Supprimer les notes d'abord OU réassigner à un autre enseignant
+                // Pour l'instant, on empêche la suppression
+                header("Location: list.php?message=Impossible de supprimer un enseignant ayant attribué des notes&message_type=error");
                 exit();
             }
             
-            // Supprimer l'élève
-            $stmt = $conn->prepare("DELETE FROM eleves WHERE id = ?");
+            // Supprimer l'enseignant
+            $stmt = $conn->prepare("DELETE FROM enseignants WHERE id = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
             
-            $log_details = "Suppression de l'élève: {$eleve['nom']} {$eleve['prenom']}";
+            $log_details = "Suppression de l'enseignant: {$enseignant['nom']} {$enseignant['prenom']} ({$enseignant['matiere']})";
             break;
             
         // Note: Vous pouvez ajouter d'autres actions comme activate/deactivate si vous ajoutez un champ is_active
     }
     
     // Journaliser l'action
-    log_activity($_SESSION['user_id'], strtoupper($action), 'eleves', $id, $log_details);
+    log_activity($_SESSION['user_id'], strtoupper($action), 'enseignants', $id, $log_details);
     
     $conn->commit();
     

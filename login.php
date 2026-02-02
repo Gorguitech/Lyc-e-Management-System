@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="text-center text-sm text-gray-600 pt-4 border-t">
                     <p>Utilisez les identifiants fournis par l'administrateur</p>
                     <p class="mt-1 text-xs">
-                        <strong>Test :</strong> admin / password
+                        <strong>Test :</strong> admin@lycee.sn / password
                     </p>
                 </div>
             </form>
