@@ -224,11 +224,13 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             </a>
             
             <!-- Gestion des enseignants -->
+             <?php if ($_SESSION['user_role'] === 'super_admin' || $_SESSION['user_role'] === 'admin'): ?>
             <a href="<?php echo BASE_URL; ?>modules/enseignants/list.php" 
                class="menu-item flex items-center space-x-3 p-3 <?php echo ($current_page == 'enseignants') ? 'active' : 'text-gray-700 hover:text-blue-600'; ?>">
                 <i class="fas fa-chalkboard-teacher w-5 text-center <?php echo ($current_page == 'enseignants') ? 'text-white' : 'text-gray-400'; ?>"></i>
                 <span class="sidebar-text font-medium">Enseignants</span>
             </a>
+            <?php endif; ?>
             
             <!-- Gestion des classes -->
             <a href="<?php echo BASE_URL; ?>modules/classes/list.php" 
