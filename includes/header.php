@@ -249,7 +249,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             <?php if ($_SESSION['user_role'] === 'super_admin' || $_SESSION['user_role'] === 'admin'): ?>
             <div class="pt-4 mt-4 border-t border-gray-100">
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3 sidebar-text">Administration</p>
-                <a href="<?php echo BASE_URL; ?>modules/users/manage.php" 
+                <a href="<?php echo BASE_URL; ?>modules/users/list.php" 
                    class="menu-item flex items-center space-x-3 p-3 <?php echo ($current_page == 'users' || $current_page == 'manage') ? 'active' : 'text-gray-700 hover:text-blue-600'; ?>">
                     <i class="fas fa-users-cog w-5 text-center <?php echo ($current_page == 'users' || $current_page == 'manage') ? 'text-white' : 'text-gray-400'; ?>"></i>
                     <span class="sidebar-text font-medium">Utilisateurs</span>
