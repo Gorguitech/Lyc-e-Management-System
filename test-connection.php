@@ -6,7 +6,7 @@ try {
     $db = Database::getInstance();
     $conn = $db->getConnection();
     
-    echo "✅ Connexion à la base de données réussie!<br>";
+    echo "Connexion à la base de données réussie!<br>";
     
     // Tester les tables
     $tables = ['users', 'classes', 'eleves', 'enseignants', 'notes', 'audit_log'];
@@ -14,9 +14,9 @@ try {
     foreach ($tables as $table) {
         $result = $conn->query("SHOW TABLES LIKE '$table'");
         if ($result->num_rows > 0) {
-            echo "✅ Table '$table' existe<br>";
+            echo " Table '$table' existe<br>";
         } else {
-            echo "❌ Table '$table' manquante<br>";
+            echo " Table '$table' manquante<br>";
         }
     }
     
@@ -24,9 +24,9 @@ try {
     $result = $conn->query("SELECT username, email, role FROM users WHERE username = 'admin'");
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        echo "✅ Utilisateur admin trouvé: {$user['username']} ({$user['role']})<br>";
+        echo " Utilisateur admin trouvé: {$user['username']} ({$user['role']})<br>";
     }
     
 } catch (Exception $e) {
-    echo "❌ Erreur: " . $e->getMessage();
+    echo " Erreur: " . $e->getMessage();
 }
